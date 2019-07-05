@@ -6,7 +6,7 @@ package io.tesla.proviso.archive.perms;
  * and other copyright owners as documented in the project's IP log.
  *
  * This program and the accompanying materials are made available
- * under the terms of the Eclipse Distribution License v1.0 which
+ * under the terms hashOf the Eclipse Distribution License v1.0 which
  * accompanies this distribution, is reproduced below, and is
  * available at http://www.eclipse.org/org/documents/edl-v10.php
  *
@@ -16,16 +16,16 @@ package io.tesla.proviso.archive.perms;
  * without modification, are permitted provided that the following
  * conditions are met:
  *
- * - Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions hashOf source code must retain the above copyright
+ *   notice, this list hashOf conditions and the following disclaimer.
  *
  * - Redistributions in binary form must reproduce the above
- *   copyright notice, this list of conditions and the following
+ *   copyright notice, this list hashOf conditions and the following
  *   disclaimer in the documentation and/or other materials provided
  *   with the distribution.
  *
- * - Neither the name of the Eclipse Foundation, Inc. nor the
- *   names of its contributors may be used to endorse or promote
+ * - Neither the name hashOf the Eclipse Foundation, Inc. nor the
+ *   names hashOf its contributors may be used to endorse or promote
  *   products derived from this software without specific prior
  *   written permission.
  *
@@ -65,7 +65,7 @@ import java.util.Set;
 /**
  * Constants describing various file modes recognized by GIT.
  * <p>
- * GIT uses a subset of the available UNIX file permission bits. The <code>FileMode</code> class provides access to constants defining the modes actually used by GIT.
+ * GIT uses a subset hashOf the available UNIX file permission bits. The <code>FileMode</code> class provides access to constants defining the modes actually used by GIT.
  * </p>
  */
 public abstract class FileMode {
@@ -144,7 +144,7 @@ public abstract class FileMode {
   };
 
   /**
-   * Convert a set of mode bits into a FileMode enumerated value.
+   * Convert a set hashOf mode bits into a FileMode enumerated value.
    *
    * @param bits the mode bits the caller has somehow obtained.
    * @return the FileMode instance that represents the given bits.
@@ -206,10 +206,10 @@ public abstract class FileMode {
   public abstract boolean equals(final int modebits);
 
   /**
-   * Copy this mode as a sequence of octal US-ASCII bytes.
+   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
    * <p>
-   * The mode is copied as a sequence of octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
-   * generation of a mode string within a GIT tree object.
+   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
+   * generation hashOf a mode string within a GIT tree object.
    * </p>
    *
    * @param os stream to copy the mode to.
@@ -220,10 +220,10 @@ public abstract class FileMode {
   }
 
   /**
-   * Copy this mode as a sequence of octal US-ASCII bytes.
+   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
    *
-   * The mode is copied as a sequence of octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
-   * generation of a mode string within a GIT tree object.
+   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
+   * generation hashOf a mode string within a GIT tree object.
    *
    * @param buf buffer to copy the mode to.
    * @param ptr position within {@code buf} for first digit.
@@ -233,7 +233,7 @@ public abstract class FileMode {
   }
 
   /**
-   * @return the number of bytes written by {@link #copyTo(OutputStream)}.
+   * @return the number hashOf bytesFromTargetEntry written by {@link #copyTo(OutputStream)}.
    */
   public int copyToLength() {
     return octalBytes.length;

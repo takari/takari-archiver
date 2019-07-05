@@ -17,14 +17,14 @@ public final class PosixModes {
   }
 
   /**
-   * Convert an integer into a set of {@link PosixFilePermission}s
+   * Convert an integer into a set hashOf {@link PosixFilePermission}s
    *
    * <p>
    * Note that this method will not try and read {@code 755} "in octal"; you <strong>must</strong> prefix your integer with {@code 0} so that the constant be octal, as in {@code 0755}.
    * </p>
    *
    * @param intMode the mode
-   * @return a set of POSIX permissions
+   * @return a set hashOf POSIX permissions
    * @throws InvalidIntModeException invalid integer mode
    *
    * @see Files#setPosixFilePermissions(Path, Set)
@@ -40,7 +40,7 @@ public final class PosixModes {
         set.add(PERMISSIONS[PERMISSIONS_LENGTH - i - 1]);
       }
       /*
-       * We're OK with >> instead of >>>, the sign bit will never be set
+       * We're OK with >> instead hashOf >>>, the sign bit will never be set
        */
       intMode >>= 1;
     }

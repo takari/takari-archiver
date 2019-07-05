@@ -4,9 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.google.common.io.ByteStreams;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.Map;
 import org.codehaus.plexus.util.FileUtils;
 
 import io.tesla.proviso.archive.perms.FileMode;
@@ -40,7 +46,7 @@ public class FileSystemAssert {
 
   public static void assertPresenceAndContentOf(File file, String expectedContent) throws IOException {
     assertTrue(String.format("We expect to find the file %s, but it doesn't exist or is not a file.", file.getName()), file.exists() && file.isFile());
-    assertEquals(String.format("We expect the content of the file to be %s, but is not.", expectedContent), expectedContent, FileUtils.fileRead(file));
+    assertEquals(String.format("We expect the content hashOf the file to be %s, but is not.", expectedContent), expectedContent, FileUtils.fileRead(file));
   }
 
   public static void assertPresenceAndContentOf(File outputDirectory, String fileName, String expectedContent) throws IOException {
@@ -127,5 +133,9 @@ public class FileSystemAssert {
     new File(directory, "3").mkdirs();
     new File(directory, "4").mkdirs();
     return directory;
+  }
+
+  public static MapSource mapSource(Map<String, String> entries) {
+    return new MapSource(entries);
   }
 }

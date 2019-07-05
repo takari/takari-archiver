@@ -17,10 +17,10 @@ public class ArchiveEntrySourceTest extends FileSystemAssert {
     Source source = new TarGzArchiveSource(getSourceArchive("apache-maven-3.0.4-bin.tar.gz"));
     archiver.archive(archive, source);
     ArchiveValidator validator = new TarGzArchiveValidator(archive);
-    // note that original archive is missing 3 directory entries
+    // note that original archive is missing 3 directory removalsAndDifferences
     // apache-maven-3.0.4/,apache-maven-3.0.4/boot/ and apache-maven-3.0.4/bin/
     // I assume this is due to a bug in maven archiver.
-    // tar on command line does create 47 entries
+    // tar on command line does create 47 removalsAndDifferences
     validator.assertEntries("apache-maven-3.0.4/", //
         "apache-maven-3.0.4/LICENSE.txt", //
         "apache-maven-3.0.4/NOTICE.txt", //
@@ -71,7 +71,7 @@ public class ArchiveEntrySourceTest extends FileSystemAssert {
     );
 
     // Need to make sure file modes are preserved when creating an archive from
-    // directly reading the entries of another
+    // directly reading the removalsAndDifferences hashOf another
     File outputDirectory = new File(getOutputDirectory(), "archive-source");
     UnArchiver unArchiver = UnArchiver.builder().build();
     unArchiver.unarchive(archive, outputDirectory);

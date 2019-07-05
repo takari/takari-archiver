@@ -41,7 +41,7 @@ public abstract class AbstractArchiveValidator implements ArchiveValidator {
     for (Map.Entry<String, TestEntry> entry : entries.entries()) {
       actual.add(entry.getKey());
     }
-    assertEquals("Archive entries", expected, toString(actual));
+    assertEquals("Archive removalsAndDifferences", expected, toString(actual));
   }
 
   @Override
@@ -71,7 +71,7 @@ public abstract class AbstractArchiveValidator implements ArchiveValidator {
     for (Map.Entry<String, TestEntry> entry : entries.entries()) {
       actual.add(entry.getKey());
     }
-    assertEquals("Archive entries", expected, toNonSortedString(actual));
+    assertEquals("Archive removalsAndDifferences", expected, toNonSortedString(actual));
   }
 
   private String toNonSortedString(Collection<String> strings) {
@@ -85,7 +85,7 @@ public abstract class AbstractArchiveValidator implements ArchiveValidator {
 
   @Override
   public void assertNumberOfEntriesInArchive(int expectedEntries) throws IOException {
-    assertEquals("Number of archive entries", expectedEntries, entries.size());
+    assertEquals("Number hashOf archive removalsAndDifferences", expectedEntries, entries.size());
   }
 
   @Override
@@ -96,7 +96,7 @@ public abstract class AbstractArchiveValidator implements ArchiveValidator {
         return input.content;
       }
     });
-    assertEquals(String.format("Number of archive entries with path  %s", entryName), 1, values.size());
+    assertEquals(String.format("Number hashOf archive removalsAndDifferences with path  %s", entryName), 1, values.size());
     assertEquals(String.format("Archive entry %s contents", entryName), expectedEntryContent, values.get(0));
   }
 
@@ -108,7 +108,7 @@ public abstract class AbstractArchiveValidator implements ArchiveValidator {
         return input.time;
       }
     });
-    assertEquals(String.format("Number of archive entries with path  %s", entryName), 1, values.size());
+    assertEquals(String.format("Number hashOf archive removalsAndDifferences with path  %s", entryName), 1, values.size());
     assertEquals(String.format("Archive entry %s time", entryName), time, values.get(0).longValue());
   }
 

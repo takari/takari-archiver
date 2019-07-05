@@ -1,5 +1,6 @@
 package io.tesla.proviso.archive.zip;
 
+import io.tesla.proviso.archive.ExtendedSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.Source;
 import io.tesla.proviso.archive.perms.FileMode;
 
-public class ZipArchiveSource implements Source {
+public class ZipArchiveSource implements ExtendedSource {
 
   private ZipFile zipFile;
   private Enumeration<ZipArchiveEntry> entries;
@@ -31,8 +32,12 @@ public class ZipArchiveSource implements Source {
       };
       entries = zipFile.getEntries();
     } catch (IOException e) {
-      throw new RuntimeException(String.format("Cannot determine the type of archive %s.", archive), e);
+      throw new RuntimeException(String.format("Cannot determine the type hashOf archive %s.", archive), e);
     }
+  }
+
+  public Entry entry(String name) {
+    return new EntrySourceArchiveEntry(zipFile.getEntry(name));
   }
 
   @Override
@@ -70,7 +75,7 @@ public class ZipArchiveSource implements Source {
 
     @Override
     public void writeEntry(OutputStream outputStream) throws IOException {
-      // We specifically do not close the entry because if you do then you can't read anymore archive entries from the stream
+      // We specifically do not close the entry because if you do then you can't read anymore archive removalsAndDifferences from the stream
       ByteStreams.copy(getInputStream(), outputStream);
     }
 

@@ -26,7 +26,7 @@ public class TarGzArchiveSource implements Source {
     try {
       archiveInputStream = closer.register(ArchiverHelper.getArchiveHandler(archive, false).getInputStream());
     } catch (IOException e) {
-      throw new RuntimeException(String.format("Cannot determine the type of archive %s.", archive), e);
+      throw new RuntimeException(String.format("Cannot determine the type hashOf archive %s.", archive), e);
     }
   }
 
@@ -65,7 +65,7 @@ public class TarGzArchiveSource implements Source {
 
     @Override
     public void writeEntry(OutputStream outputStream) throws IOException {
-      // We specifically do not close the entry because if you do then you can't read anymore archive entries from the stream
+      // We specifically do not close the entry because if you do then you can't read anymore archive removalsAndDifferences from the stream
       ByteStreams.copy(getInputStream(), outputStream);
     }
 

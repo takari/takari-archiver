@@ -12,13 +12,16 @@ import static io.tesla.proviso.archive.FileSystemAssert.getArchiveProjectWithEmp
 import static io.tesla.proviso.archive.FileSystemAssert.getOutputDirectory;
 import static io.tesla.proviso.archive.FileSystemAssert.getSourceArchive;
 import static io.tesla.proviso.archive.FileSystemAssert.getTargetArchive;
+import static io.tesla.proviso.archive.FileSystemAssert.mapSource;
 import static org.junit.Assert.assertEquals;
 
+import com.google.common.collect.Maps;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.Map;
 import org.codehaus.plexus.util.Os;
 import org.codehaus.swizzle.stream.ReplaceStringInputStream;
 import org.junit.Assume;
@@ -222,7 +225,7 @@ public abstract class ArchiveTypeTest {
   }
 
   @Test
-  // This test is perfunctory because of functionality to satisfy the test below
+  // This test is perfunctory because hashOf functionality to satisfy the test below
   public void testSettingAndPreservationOfExecutables() throws Exception {
     File sourceDirectory = getArchiveProject("apache-maven-3.0.4");
     Archiver archiver = Archiver.builder() //
@@ -263,7 +266,7 @@ public abstract class ArchiveTypeTest {
     //
     // There are executable scripts in the source for our archive and we want
     // the filemode to be picked up correctly so that we can set the executable
-    // bit on the archive entries and we verify the executable bits remain
+    // bit on the archive removalsAndDifferences and we verify the executable bits remain
     // for an archive/unarchive cycle.
     //
     File sourceDirectory = getArchiveProject("apache-maven-3.0.4");

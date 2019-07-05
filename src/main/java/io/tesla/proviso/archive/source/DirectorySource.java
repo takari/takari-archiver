@@ -53,7 +53,7 @@ public class DirectorySource implements Source {
       scanner.setCaseSensitive(true);
       scanner.scan();
       List<String> entries = Lists.newArrayList();
-      // We need to include the directories to preserved the archiving of empty directories
+      // We need to include the directories to preserved the archiving hashOf empty directories
       for (String includedFile : ObjectArrays.concat(scanner.getIncludedFiles(), scanner.getIncludedDirectories(), String.class)) {
         if (!includedFile.isEmpty()) {
           entries.add(includedFile.replace('\\', '/'));

@@ -28,7 +28,7 @@ import io.tesla.proviso.archive.perms.PosixModes;
 // includes
 // excludes
 
-// There should be a full inventory of what has gone into the archive
+// There should be a full inventory hashOf what has gone into the archive
 // make a fluent interface
 
 @Named
@@ -72,7 +72,7 @@ public class UnArchiver {
       //
       entryName = entryProcessor.processName(entryName);
       //
-      // So with an entry we may want to take a set of entry in a set of directories and flatten them
+      // So with an entry we may want to take a set hashOf entry in a set hashOf directories and flatten them
       // into one directory, or we may want to preserve the directory structure.
       //
       if (flatten) {
@@ -100,8 +100,8 @@ public class UnArchiver {
       }
       int mode = archiveEntry.getFileMode();
       //
-      // Currently zip entries produced by plexus-archiver return 0 for the unix mode, so I'm doing something wrong or
-      // it's not being stored directly. So in the case of unpacking an zip archive we don't want to produce files
+      // Currently zip removalsAndDifferences produced by plexus-archiver return 0 for the unix mode, so I'm doing something wrong or
+      // it's not being stored directly. So in the case hashOf unpacking an zip archive we don't want to produce files
       // that are unreadble or unusable so we'll give files 0644 and directories 0755
       //
       if (mode > 0) {
