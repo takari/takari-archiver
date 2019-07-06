@@ -8,6 +8,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class Hash {
 
@@ -21,5 +26,20 @@ public class Hash {
       ByteStreams.copy(targetStream, Funnels.asOutputStream(hasher));
     }
     return hasher.hash().toString();
+  }
+
+  public static Map<String, String> hashEntriesOf(File file) throws IOException {
+
+    Map<String, String> paths = new HashMap<>();
+    ZipFile zip = new ZipFile(file);
+    Enumeration<? extends ZipEntry> entries = zip.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = entries.nextElement();
+      if (!entry.isDirectory()) {
+        paths.put(entry.getName(), Hash.hashOf(zip.getInputStream(entry)));
+      }
+    }
+    zip.close();
+    return paths;
   }
 }

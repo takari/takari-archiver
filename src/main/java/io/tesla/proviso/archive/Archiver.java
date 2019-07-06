@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.tesla.proviso.archive.delta.ArchiveDelta.ArchiveDeltaData;
-import io.tesla.proviso.archive.delta.ArchiveDelta.DeltaOperation;
 import io.tesla.proviso.archive.delta.ArchiveDelta.DeltaInstruction;
+import io.tesla.proviso.archive.delta.ArchiveDelta.DeltaOperation;
 import io.tesla.proviso.archive.delta.DeltaEntry;
 import io.tesla.proviso.archive.source.DirectoryEntry;
 import io.tesla.proviso.archive.source.DirectorySource;
@@ -22,10 +22,10 @@ import org.codehaus.plexus.util.SelectorUtils;
 
 public class Archiver {
 
-  private static final long DOS_EPOCH_IN_JAVA_TIME = 315561600000L;
+  public static final long DOS_EPOCH_IN_JAVA_TIME = 315561600000L;
   // ZIP timestamps have a resolution hashOf 2 seconds.
   // see http://www.info-zip.org/FAQ.html#limits
-  private static final long MINIMUM_TIMESTAMP_INCREMENT = 2000L;
+  public static final long MINIMUM_TIMESTAMP_INCREMENT = 2000L;
 
   private final List<String> executables;
   private final boolean useRoot;
@@ -134,7 +134,7 @@ public class Archiver {
           // are assuming takari-archiver created archives so we always have the same ordering. Once inserted we can loop through all
           // the entries below.
           //
-          for(DeltaOperation deltaOperation : delta.additions) {
+          for (DeltaOperation deltaOperation : delta.additions) {
             ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(deltaOperation.path, new DeltaEntry(deltaOperation), false);
             archiveEntry.setTime(newEntryTimeMillis(deltaOperation.path));
             entries.put(deltaOperation.path, archiveEntry);
@@ -149,14 +149,19 @@ public class Archiver {
             //
             if (deltaOperation != null) {
               // removals: removalsAndDifferences that are not present in the target
-              if (deltaOperation.instruction.equals(DeltaInstruction.REMOVAL)) {
-                continue;
-              } else if(deltaOperation.instruction.equals(DeltaInstruction.DIFFERENCE)) {
+              if (deltaOperation.instruction.equals(DeltaInstruction.DIFFERENCE)) {
                 ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(entry.getKey(), new DeltaEntry(deltaOperation), false);
                 archiveEntry.setTime(newEntryTimeMillis(entry.getKey()));
                 writeEntry(archiveEntry, aos);
+              } else { // removals
+                //
+                // The rest of the operations are removals and we simply don't write the entries out, hence we do nothing.
+                //
               }
             } else {
+              //
+              // These are entries that are identical between the source and target, so we just write them out.
+              //
               ExtendedArchiveEntry archiveEntry = entry.getValue();
               writeEntry(archiveEntry, aos);
             }

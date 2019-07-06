@@ -1,5 +1,7 @@
 package io.tesla.proviso.archive.delta;
 
+import static io.tesla.proviso.archive.delta.Hash.hashEntriesOf;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -10,9 +12,8 @@ public class ArchiveDeltaGenerator {
 
     ArchiveDelta delta = new ArchiveDelta(source, target);
 
-    JarHash jarHash = new JarHash();
-    Map<String, String> sourceEntries = jarHash.entries(source);
-    Map<String, String> targetEntries = jarHash.entries(target);
+    Map<String, String> sourceEntries = hashEntriesOf(source);
+    Map<String, String> targetEntries = hashEntriesOf(target);
 
     for (String path : sourceEntries.keySet()) {
       if (targetEntries.containsKey(path)) {

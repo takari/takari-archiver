@@ -46,7 +46,7 @@ public class ArchiveDeltaGeneratorTest {
         .build();
     archiver.archive(target, mapSource(targetEntries));
 
-    ArchiveDelta delta = new ArchiveDeltaGenerator().deltaOf(source, target);
+    ArchiveDelta delta = deltaOf(source, target);
     delta.print();
     assertEquals(0, delta.additions().size());
     assertEquals(0, delta.removals().size());
@@ -75,7 +75,7 @@ public class ArchiveDeltaGeneratorTest {
         .build();
     archiver.archive(target, mapSource(targetEntries));
 
-    ArchiveDelta delta = new ArchiveDeltaGenerator().deltaOf(source, target);
+    ArchiveDelta delta = deltaOf(source, target);
     delta.print();
     assertEquals(1, delta.additions().size());
     assertEquals(1, delta.removals().size());
