@@ -12,9 +12,12 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //
-// The archive delta between a source and target
+// Calculate the delta between a source and target taking into consideration additions, removals and differences.
+//
+// We are starting with a source and with the application of a delta we generate a target
 //
 public class ArchiveDelta {
 
@@ -80,19 +83,9 @@ public class ArchiveDelta {
 
     ExtendedSource targetSource = new ZipArchiveSource(target);
     Map<String,DeltaOperation> removalsAndDifferences = Maps.newHashMap();
-
-    List<DeltaOperation> deltaOperationAdditions = Lists.newArrayList();
-    for(String p : additions) {
-      deltaOperationAdditions.add(new DeltaOperation(DeltaInstruction.ADDITION, p, bytesFromTargetEntry(p, targetSource)));
-    }
-
-    for(String p : removals) {
-      removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.REMOVAL, p, null));
-    }
-
-    for(String p : differences) {
-      removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.DIFFERENCE, p, bytesFromTargetEntry(p, targetSource)));
-    }
+    List<DeltaOperation> deltaOperationAdditions = additions.stream().map(p -> new DeltaOperation(DeltaInstruction.ADDITION, p, bytesFromTargetEntry(p, targetSource))).collect(Collectors.toList());
+    differences.forEach(p -> removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.DIFFERENCE, p, bytesFromTargetEntry(p, targetSource))));
+    removals.forEach(p -> removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.REMOVAL, p)));
 
     return new ArchiveDeltaData(removalsAndDifferences, deltaOperationAdditions);
   }
@@ -123,19 +116,14 @@ public class ArchiveDelta {
     public String path;
     public byte[] data;
 
+    public DeltaOperation(DeltaInstruction instruction, String path) {
+      this(instruction, path, null);
+    }
+
     public DeltaOperation(DeltaInstruction instruction, String path, byte[] data) {
       this.instruction = instruction;
       this.path = path;
       this.data = data;
-    }
-
-    @Override
-    public String toString() {
-      return "DeltaOperation{" +
-          "instruction=" + instruction +
-          ", path='" + path + '\'' +
-          ", data=" + Arrays.toString(data) +
-          '}';
     }
   }
 
