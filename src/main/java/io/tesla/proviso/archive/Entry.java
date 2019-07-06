@@ -7,6 +7,7 @@ import java.io.OutputStream;
 // Source entry, should really be renamed as such...
 
 public interface Entry {
+
   String getName();
 
   InputStream getInputStream() throws IOException;

@@ -2,13 +2,13 @@ package io.tesla.proviso.archive;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.apache.commons.compress.archivers.ArchiveEntry;
 
 public interface ExtendedArchiveEntry extends ArchiveEntry {
-  void setFileMode(int mode);
 
   int getFileMode();
+
+  void setFileMode(int mode);
 
   void setSize(long size);
 

@@ -1,12 +1,10 @@
 package io.tesla.proviso.archive.tar;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-
 import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.ExtendedArchiveEntry;
+import java.io.IOException;
+import java.io.OutputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 
 public class ExtendedTarArchiveEntry extends TarArchiveEntry implements ExtendedArchiveEntry {
 
@@ -18,13 +16,13 @@ public class ExtendedTarArchiveEntry extends TarArchiveEntry implements Extended
   }
 
   @Override
-  public void setFileMode(int mode) {
-    setMode(mode);
+  public int getFileMode() {
+    return getMode();
   }
 
   @Override
-  public int getFileMode() {
-    return getMode();
+  public void setFileMode(int mode) {
+    setMode(mode);
   }
 
   @Override

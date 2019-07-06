@@ -9,7 +9,6 @@ import io.tesla.proviso.archive.zip.ZipArchiveSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,18 +22,16 @@ public class ArchiveDelta {
 
   public File source;
   public File target;
-
-  public ArchiveDelta(File source, File target) {
-    this.source = source;
-    this.target = target;
-  }
-
   // Additions from target
   private List<String> additions = Lists.newArrayList();
   // Removals from target that are present in source
   private List<String> removals = Lists.newArrayList();
   // Differences from target
   private List<String> differences = Lists.newArrayList();
+  public ArchiveDelta(File source, File target) {
+    this.source = source;
+    this.target = target;
+  }
 
   public void addition(String path) {
     this.additions.add(path);
@@ -82,7 +79,7 @@ public class ArchiveDelta {
   public ArchiveDeltaData data() {
 
     ExtendedSource targetSource = new ZipArchiveSource(target);
-    Map<String,DeltaOperation> removalsAndDifferences = Maps.newHashMap();
+    Map<String, DeltaOperation> removalsAndDifferences = Maps.newHashMap();
     List<DeltaOperation> deltaOperationAdditions = additions.stream().map(p -> new DeltaOperation(DeltaInstruction.ADDITION, p, bytesFromTargetEntry(p, targetSource))).collect(Collectors.toList());
     differences.forEach(p -> removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.DIFFERENCE, p, bytesFromTargetEntry(p, targetSource))));
     removals.forEach(p -> removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.REMOVAL, p)));
@@ -92,19 +89,25 @@ public class ArchiveDelta {
 
   public byte[] bytesFromTargetEntry(String name, ExtendedSource targetSource) {
     Entry entry = targetSource.entry(name);
-    try(InputStream is = entry.getInputStream()) {
+    try (InputStream is = entry.getInputStream()) {
       return ByteStreams.toByteArray(is);
     } catch (IOException e) {
       return null;
     }
   }
 
+  public enum DeltaInstruction {
+    ADDITION,
+    REMOVAL,
+    DIFFERENCE
+  }
+
   public class ArchiveDeltaData {
 
-    public Map<String,DeltaOperation> removalsAndDifferences;
+    public Map<String, DeltaOperation> removalsAndDifferences;
     public List<DeltaOperation> additions;
 
-    public ArchiveDeltaData(Map<String,DeltaOperation> entries, List<DeltaOperation> additions) {
+    public ArchiveDeltaData(Map<String, DeltaOperation> entries, List<DeltaOperation> additions) {
       this.removalsAndDifferences = entries;
       this.additions = additions;
     }
@@ -125,11 +128,5 @@ public class ArchiveDelta {
       this.path = path;
       this.data = data;
     }
-  }
-
-  public enum DeltaInstruction {
-    ADDITION,
-    REMOVAL,
-    DIFFERENCE
   }
 }

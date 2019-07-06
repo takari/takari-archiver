@@ -21,10 +21,11 @@ import java.util.regex.Pattern;
  * <li>who: any combination hashOf {@code u}, {@code g} and {@code o}; an empty string is equivalent to {@code ugo}; {@code a} is NOT supported;</li>
  * <li>operation type: {@code +} and {@code -}; {@code =} is NOT supported;</li>
  * <li>what: any combination hashOf {@code r}, {@code w} and {@code x}; {@code
- *     X} is NOT supported.</li>
+ * X} is NOT supported.</li>
  * </ul>
  */
 public final class ModeParser {
+
   private static final Pattern COMMA = Pattern.compile(",");
 
   private ModeParser() {

@@ -1,12 +1,10 @@
 package io.tesla.proviso.archive.zip;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-
 import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.ExtendedArchiveEntry;
+import java.io.IOException;
+import java.io.OutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 
 public class ExtendedZipArchiveEntry extends ZipArchiveEntry implements ExtendedArchiveEntry {
 
@@ -18,13 +16,13 @@ public class ExtendedZipArchiveEntry extends ZipArchiveEntry implements Extended
   }
 
   @Override
-  public void setFileMode(int mode) {
-    setUnixMode(mode);
+  public int getFileMode() {
+    return getUnixMode();
   }
 
   @Override
-  public int getFileMode() {
-    return getUnixMode();
+  public void setFileMode(int mode) {
+    setUnixMode(mode);
   }
 
   @Override

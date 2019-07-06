@@ -1,5 +1,6 @@
 package io.tesla.proviso.archive;
 
+import com.google.common.io.ByteStreams;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,12 +8,10 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.io.ByteStreams;
-
 public class StringListSource implements Source {
 
   private List<String> entries;
-  
+
   public StringListSource(List<String> entries) {
     this.entries = entries;
   }
@@ -39,7 +38,7 @@ public class StringListSource implements Source {
   class StringEntry implements Entry {
 
     final String name;
-    
+
     public StringEntry(String name) {
       this.name = name;
     }
@@ -53,7 +52,7 @@ public class StringListSource implements Source {
     public InputStream getInputStream() throws IOException {
       return new ByteArrayInputStream(name.getBytes());
     }
-    
+
     @Override
     public long getSize() {
       return name.length();
@@ -84,11 +83,11 @@ public class StringListSource implements Source {
       return 0;
     }
   }
-  
+
   class StringEntryIterator implements Iterator<Entry> {
 
     final Iterator<String> delegate;
-    
+
     public StringEntryIterator(Iterator<String> delegate) {
       this.delegate = delegate;
     }

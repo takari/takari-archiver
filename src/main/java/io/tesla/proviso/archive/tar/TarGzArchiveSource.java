@@ -1,20 +1,17 @@
 package io.tesla.proviso.archive.tar;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Closer;
+import io.tesla.proviso.archive.ArchiverHelper;
+import io.tesla.proviso.archive.Entry;
+import io.tesla.proviso.archive.Source;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
-
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Closer;
-
-import io.tesla.proviso.archive.ArchiverHelper;
-import io.tesla.proviso.archive.Entry;
-import io.tesla.proviso.archive.Source;
 
 public class TarGzArchiveSource implements Source {
 
@@ -33,6 +30,16 @@ public class TarGzArchiveSource implements Source {
   @Override
   public Iterable<Entry> entries() {
     return () -> new ArchiveEntryIterator();
+  }
+
+  @Override
+  public void close() throws IOException {
+    closer.close();
+  }
+
+  @Override
+  public boolean isDirectory() {
+    return true;
   }
 
   class EntrySourceArchiveEntry implements Entry {
@@ -107,16 +114,6 @@ public class TarGzArchiveSource implements Source {
     public void remove() {
       throw new UnsupportedOperationException("remove method not implemented");
     }
-  }
-
-  @Override
-  public void close() throws IOException {
-    closer.close();
-  }
-
-  @Override
-  public boolean isDirectory() {
-    return true;
   }
 
 }

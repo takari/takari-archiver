@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public final class PosixModes {
+
   static final PosixFilePermission[] PERMISSIONS = PosixFilePermission.values();
 
   private static final int PERMISSIONS_LENGTH = PERMISSIONS.length;
@@ -26,7 +27,6 @@ public final class PosixModes {
    * @param intMode the mode
    * @return a set hashOf POSIX permissions
    * @throws InvalidIntModeException invalid integer mode
-   *
    * @see Files#setPosixFilePermissions(Path, Set)
    */
   public static Set<PosixFilePermission> intModeToPosix(int intMode) {

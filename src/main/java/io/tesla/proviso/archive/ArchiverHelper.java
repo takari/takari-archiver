@@ -1,11 +1,14 @@
 package io.tesla.proviso.archive;
 
-import java.io.File;
-
 import io.tesla.proviso.archive.tar.TarGzArchiveHandler;
 import io.tesla.proviso.archive.zip.ZipArchiveHandler;
+import java.io.File;
 
 public class ArchiverHelper {
+
+  public static ArchiveHandler getArchiveHandler(File archive) {
+    return getArchiveHandler(archive, true);
+  }
 
   public static ArchiveHandler getArchiveHandler(File archive, boolean posixLongFileMode) {
     ArchiveHandler archiveHandler;

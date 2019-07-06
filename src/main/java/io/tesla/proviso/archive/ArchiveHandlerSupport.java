@@ -1,6 +1,11 @@
 package io.tesla.proviso.archive;
 
+import io.tesla.proviso.archive.delta.Hash;
 import io.tesla.proviso.archive.perms.FileMode;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class ArchiveHandlerSupport implements ArchiveHandler {
 
@@ -21,5 +26,20 @@ public abstract class ArchiveHandlerSupport implements ArchiveHandler {
       }
     }
     return entry;
+  }
+
+  @Override
+  public Map<String, String> hashEntriesOf(File archive) throws IOException {
+
+    Map<String, String> paths = new HashMap<>();
+    Source source = getArchiveSource();
+    for (Entry entry : source.entries()) {
+      String entryName = entry.getName();
+      if (!entry.isDirectory()) {
+        paths.put(entryName, Hash.hashOf(entry.getInputStream()));
+      }
+    }
+    source.close();
+    return paths;
   }
 }

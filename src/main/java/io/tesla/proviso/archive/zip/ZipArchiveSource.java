@@ -1,21 +1,17 @@
 package io.tesla.proviso.archive.zip;
 
+import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.ExtendedSource;
+import io.tesla.proviso.archive.perms.FileMode;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Iterator;
-
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-
-import com.google.common.io.ByteStreams;
-
-import io.tesla.proviso.archive.Entry;
-import io.tesla.proviso.archive.Source;
-import io.tesla.proviso.archive.perms.FileMode;
 
 public class ZipArchiveSource implements ExtendedSource {
 
@@ -43,6 +39,16 @@ public class ZipArchiveSource implements ExtendedSource {
   @Override
   public Iterable<Entry> entries() {
     return () -> new ArchiveEntryIterator();
+  }
+
+  @Override
+  public void close() throws IOException {
+    zipFile.close();
+  }
+
+  @Override
+  public boolean isDirectory() {
+    return true;
   }
 
   class EntrySourceArchiveEntry implements Entry {
@@ -111,16 +117,6 @@ public class ZipArchiveSource implements ExtendedSource {
     public void remove() {
       throw new UnsupportedOperationException("remove method not implemented");
     }
-  }
-
-  @Override
-  public void close() throws IOException {
-    zipFile.close();
-  }
-
-  @Override
-  public boolean isDirectory() {
-    return true;
   }
 
 }

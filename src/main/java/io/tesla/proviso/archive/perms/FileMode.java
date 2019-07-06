@@ -69,6 +69,7 @@ import java.util.Set;
  * </p>
  */
 public abstract class FileMode {
+
   /**
    * Mask to apply to a file mode to obtain its type bits.
    *
@@ -80,22 +81,34 @@ public abstract class FileMode {
    */
   public static final int TYPE_MASK = 0170000;
 
-  /** Bit pattern for {@link #TYPE_MASK} matching {@link #TREE}. */
+  /**
+   * Bit pattern for {@link #TYPE_MASK} matching {@link #TREE}.
+   */
   public static final int TYPE_TREE = 0040000;
 
-  /** Bit pattern for {@link #TYPE_MASK} matching {@link #SYMLINK}. */
+  /**
+   * Bit pattern for {@link #TYPE_MASK} matching {@link #SYMLINK}.
+   */
   public static final int TYPE_SYMLINK = 0120000;
 
-  /** Bit pattern for {@link #TYPE_MASK} matching {@link #REGULAR_FILE}. */
+  /**
+   * Bit pattern for {@link #TYPE_MASK} matching {@link #REGULAR_FILE}.
+   */
   public static final int TYPE_FILE = 0100000;
 
-  /** Bit pattern for {@link #TYPE_MASK} matching {@link #GITLINK}. */
+  /**
+   * Bit pattern for {@link #TYPE_MASK} matching {@link #GITLINK}.
+   */
   public static final int TYPE_GITLINK = 0160000;
 
-  /** Bit pattern for {@link #TYPE_MASK} matching {@link #MISSING}. */
+  /**
+   * Bit pattern for {@link #TYPE_MASK} matching {@link #MISSING}.
+   */
   public static final int TYPE_MISSING = 0000000;
 
-  /** Mode indicating an entry is a tree (aka directory). */
+  /**
+   * Mode indicating an entry is a tree (aka directory).
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode TREE = new FileMode(TYPE_TREE) {
     public boolean equals(final int modeBits) {
@@ -103,7 +116,9 @@ public abstract class FileMode {
     }
   };
 
-  /** Mode indicating an entry is a symbolic link. */
+  /**
+   * Mode indicating an entry is a symbolic link.
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode SYMLINK = new FileMode(TYPE_SYMLINK) {
     public boolean equals(final int modeBits) {
@@ -111,7 +126,9 @@ public abstract class FileMode {
     }
   };
 
-  /** Mode indicating an entry is a non-executable file. */
+  /**
+   * Mode indicating an entry is a non-executable file.
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode REGULAR_FILE = new FileMode(0100644) {
     public boolean equals(final int modeBits) {
@@ -119,7 +136,9 @@ public abstract class FileMode {
     }
   };
 
-  /** Mode indicating an entry is an executable file. */
+  /**
+   * Mode indicating an entry is an executable file.
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode EXECUTABLE_FILE = new FileMode(0100755) {
     public boolean equals(final int modeBits) {
@@ -127,7 +146,9 @@ public abstract class FileMode {
     }
   };
 
-  /** Mode indicating an entry is a submodule commit in another repository. */
+  /**
+   * Mode indicating an entry is a submodule commit in another repository.
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode GITLINK = new FileMode(TYPE_GITLINK) {
     public boolean equals(final int modeBits) {
@@ -135,46 +156,16 @@ public abstract class FileMode {
     }
   };
 
-  /** Mode indicating an entry is missing during parallel walks. */
+  /**
+   * Mode indicating an entry is missing during parallel walks.
+   */
   @SuppressWarnings("synthetic-access")
   public static final FileMode MISSING = new FileMode(TYPE_MISSING) {
     public boolean equals(final int modeBits) {
       return modeBits == 0;
     }
   };
-
-  /**
-   * Convert a set hashOf mode bits into a FileMode enumerated value.
-   *
-   * @param bits the mode bits the caller has somehow obtained.
-   * @return the FileMode instance that represents the given bits.
-   */
-  public static final FileMode fromBits(final int bits) {
-    switch (bits & TYPE_MASK) {
-      case TYPE_MISSING:
-        if (bits == 0) return MISSING;
-        break;
-      case TYPE_TREE:
-        return TREE;
-      case TYPE_FILE:
-        if ((bits & 0111) != 0) return EXECUTABLE_FILE;
-        return REGULAR_FILE;
-      case TYPE_SYMLINK:
-        return SYMLINK;
-      case TYPE_GITLINK:
-        return GITLINK;
-    }
-
-    return new FileMode(bits) {
-      @Override
-      public boolean equals(final int a) {
-        return bits == a;
-      }
-    };
-  }
-
   private final byte[] octalBytes;
-
   private final int modeBits;
 
   private FileMode(int mode) {
@@ -193,67 +184,43 @@ public abstract class FileMode {
         octalBytes[k] = tmp[p + k];
       }
     } else {
-      octalBytes = new byte[] {'0'};
+      octalBytes = new byte[]{'0'};
     }
   }
 
   /**
-   * Test a file mode for equality with this {@link FileMode} object.
+   * Convert a set hashOf mode bits into a FileMode enumerated value.
    *
-   * @param modebits
-   * @return true if the mode bits represent the same mode as this object
+   * @param bits the mode bits the caller has somehow obtained.
+   * @return the FileMode instance that represents the given bits.
    */
-  public abstract boolean equals(final int modebits);
+  public static final FileMode fromBits(final int bits) {
+    switch (bits & TYPE_MASK) {
+      case TYPE_MISSING:
+        if (bits == 0) {
+          return MISSING;
+        }
+        break;
+      case TYPE_TREE:
+        return TREE;
+      case TYPE_FILE:
+        if ((bits & 0111) != 0) {
+          return EXECUTABLE_FILE;
+        }
+        return REGULAR_FILE;
+      case TYPE_SYMLINK:
+        return SYMLINK;
+      case TYPE_GITLINK:
+        return GITLINK;
+    }
 
-  /**
-   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
-   * <p>
-   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
-   * generation hashOf a mode string within a GIT tree object.
-   * </p>
-   *
-   * @param os stream to copy the mode to.
-   * @throws IOException the stream encountered an error during the copy.
-   */
-  public void copyTo(final OutputStream os) throws IOException {
-    os.write(octalBytes);
+    return new FileMode(bits) {
+      @Override
+      public boolean equals(final int a) {
+        return bits == a;
+      }
+    };
   }
-
-  /**
-   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
-   *
-   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
-   * generation hashOf a mode string within a GIT tree object.
-   *
-   * @param buf buffer to copy the mode to.
-   * @param ptr position within {@code buf} for first digit.
-   */
-  public void copyTo(byte[] buf, int ptr) {
-    System.arraycopy(octalBytes, 0, buf, ptr, octalBytes.length);
-  }
-
-  /**
-   * @return the number hashOf bytesFromTargetEntry written by {@link #copyTo(OutputStream)}.
-   */
-  public int copyToLength() {
-    return octalBytes.length;
-  }
-
-  /** Format this mode as an octal string (for debugging only). */
-  public String toString() {
-    return Integer.toOctalString(modeBits);
-  }
-
-  /**
-   * @return The mode bits as an integer.
-   */
-  public int getBits() {
-    return modeBits;
-  }
-
-  //
-  // Utilities for dealing with file modes
-  //
 
   public static int makeExecutable(int fileMode) {
     return fileMode | 0111;
@@ -371,5 +338,64 @@ public abstract class FileMode {
 
   private static boolean isSet(int mode, int bit) {
     return (mode & bit) == bit;
+  }
+
+  /**
+   * Test a file mode for equality with this {@link FileMode} object.
+   *
+   * @return true if the mode bits represent the same mode as this object
+   */
+  public abstract boolean equals(final int modebits);
+
+  //
+  // Utilities for dealing with file modes
+  //
+
+  /**
+   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
+   * <p>
+   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
+   * generation hashOf a mode string within a GIT tree object.
+   * </p>
+   *
+   * @param os stream to copy the mode to.
+   * @throws IOException the stream encountered an error during the copy.
+   */
+  public void copyTo(final OutputStream os) throws IOException {
+    os.write(octalBytes);
+  }
+
+  /**
+   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
+   *
+   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
+   * generation hashOf a mode string within a GIT tree object.
+   *
+   * @param buf buffer to copy the mode to.
+   * @param ptr position within {@code buf} for first digit.
+   */
+  public void copyTo(byte[] buf, int ptr) {
+    System.arraycopy(octalBytes, 0, buf, ptr, octalBytes.length);
+  }
+
+  /**
+   * @return the number hashOf bytesFromTargetEntry written by {@link #copyTo(OutputStream)}.
+   */
+  public int copyToLength() {
+    return octalBytes.length;
+  }
+
+  /**
+   * Format this mode as an octal string (for debugging only).
+   */
+  public String toString() {
+    return Integer.toOctalString(modeBits);
+  }
+
+  /**
+   * @return The mode bits as an integer.
+   */
+  public int getBits() {
+    return modeBits;
   }
 }

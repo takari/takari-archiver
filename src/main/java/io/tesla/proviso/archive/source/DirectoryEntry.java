@@ -1,11 +1,10 @@
 package io.tesla.proviso.archive.source;
 
+import io.tesla.proviso.archive.Entry;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import io.tesla.proviso.archive.Entry;
 
 public class DirectoryEntry implements Entry {
 
@@ -34,7 +33,8 @@ public class DirectoryEntry implements Entry {
   }
 
   @Override
-  public void writeEntry(OutputStream outputStream) throws IOException {}
+  public void writeEntry(OutputStream outputStream) throws IOException {
+  }
 
   @Override
   public int getFileMode() {

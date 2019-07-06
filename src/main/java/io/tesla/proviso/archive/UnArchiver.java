@@ -1,5 +1,11 @@
 package io.tesla.proviso.archive;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.perms.FileMode;
+import io.tesla.proviso.archive.perms.PosixModes;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,17 +17,8 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteStreams;
-
-import io.tesla.proviso.archive.perms.FileMode;
-import io.tesla.proviso.archive.perms.PosixModes;
 
 // useRoot
 // directories
@@ -45,6 +42,10 @@ public class UnArchiver {
     this.flatten = flatten;
     this.selector = new Selector(includes, excludes);
     this.posixLongFileMode = posixLongFileMode;
+  }
+
+  public static UnArchiverBuilder builder() {
+    return new UnArchiverBuilder();
   }
 
   public void unarchive(File archive, File outputDirectory) throws IOException {
@@ -125,12 +126,6 @@ public class UnArchiver {
     }
   }
 
-  private void createDir(File dir) {
-    if (dir.exists() == false) {
-      dir.mkdirs();
-    }
-  }
-
   //
   // Archiver archiver = Archiver.builder()
   // .includes("**/*.java")
@@ -141,23 +136,9 @@ public class UnArchiver {
   // .useRoot(false)
   // .build();
 
-  public static UnArchiverBuilder builder() {
-    return new UnArchiverBuilder();
-  }
-
-  /**
-   * {@EntryProcesor} that leaves the entry name and content as-is.
-   */
-  class NoopEntryProcessor implements UnarchivingEntryProcessor {
-
-    @Override
-    public String processName(String entryName) {
-      return entryName;
-    }
-
-    @Override
-    public void processStream(String entryName, InputStream inputStream, OutputStream outputStream) throws IOException {
-      ByteStreams.copy(inputStream, outputStream);
+  private void createDir(File dir) {
+    if (dir.exists() == false) {
+      dir.mkdirs();
     }
   }
 
@@ -216,6 +197,22 @@ public class UnArchiver {
 
     public UnArchiver build() {
       return new UnArchiver(includes, excludes, useRoot, flatten, posixLongFileMode);
+    }
+  }
+
+  /**
+   * {@EntryProcesor} that leaves the entry name and content as-is.
+   */
+  class NoopEntryProcessor implements UnarchivingEntryProcessor {
+
+    @Override
+    public String processName(String entryName) {
+      return entryName;
+    }
+
+    @Override
+    public void processStream(String entryName, InputStream inputStream, OutputStream outputStream) throws IOException {
+      ByteStreams.copy(inputStream, outputStream);
     }
   }
 }

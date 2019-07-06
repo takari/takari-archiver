@@ -1,15 +1,13 @@
 package io.tesla.proviso.archive.source;
 
+import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.Entry;
+import io.tesla.proviso.archive.perms.FileMode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import com.google.common.io.ByteStreams;
-
-import io.tesla.proviso.archive.Entry;
-import io.tesla.proviso.archive.perms.FileMode;
 
 public class FileEntry implements Entry {
 

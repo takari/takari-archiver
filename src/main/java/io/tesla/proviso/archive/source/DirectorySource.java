@@ -1,20 +1,18 @@
 package io.tesla.proviso.archive.source;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.ObjectArrays;
+import io.tesla.proviso.archive.Entry;
+import io.tesla.proviso.archive.Source;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
 import org.codehaus.plexus.util.DirectoryScanner;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ObjectArrays;
-
-import io.tesla.proviso.archive.Entry;
-import io.tesla.proviso.archive.Source;
-
 public class DirectorySource implements Source {
+
   private final File[] sourceDirectories;
 
   public DirectorySource(File... sourceDirectories) {
@@ -39,7 +37,17 @@ public class DirectorySource implements Source {
     };
   }
 
+  @Override
+  public void close() throws IOException {
+  }
+
+  @Override
+  public boolean isDirectory() {
+    return true;
+  }
+
   class DirectoryEntryIterator implements Iterator<Entry> {
+
     final String[] files;
     final File sourceDirectory;
     int currentFileIndex;
@@ -77,14 +85,6 @@ public class DirectorySource implements Source {
     public void remove() {
       throw new UnsupportedOperationException("remove method not implemented");
     }
-  }
-
-  @Override
-  public void close() throws IOException {}
-
-  @Override
-  public boolean isDirectory() {
-    return true;
   }
 
 }

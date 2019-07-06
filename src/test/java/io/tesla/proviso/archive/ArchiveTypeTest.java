@@ -12,26 +12,20 @@ import static io.tesla.proviso.archive.FileSystemAssert.getArchiveProjectWithEmp
 import static io.tesla.proviso.archive.FileSystemAssert.getOutputDirectory;
 import static io.tesla.proviso.archive.FileSystemAssert.getSourceArchive;
 import static io.tesla.proviso.archive.FileSystemAssert.getTargetArchive;
-import static io.tesla.proviso.archive.FileSystemAssert.mapSource;
 import static org.junit.Assert.assertEquals;
-
-import com.google.common.collect.Maps;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.util.Map;
-import org.codehaus.plexus.util.Os;
-import org.codehaus.swizzle.stream.ReplaceStringInputStream;
-import org.junit.Assume;
-import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
-
 import io.tesla.proviso.archive.source.FileSource;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import org.codehaus.plexus.util.Os;
+import org.codehaus.swizzle.stream.ReplaceStringInputStream;
+import org.junit.Assume;
+import org.junit.Test;
 
 public abstract class ArchiveTypeTest {
 
@@ -349,7 +343,6 @@ public abstract class ArchiveTypeTest {
     assertPresenceAndContentOf(file(outputDirectory, "archive-with-entry-processor/src/main/java/io/takari/app/file.txt"), "PROCESSED_TEXT");
     assertDirectoryDoesNotExist(outputDirectory, "archive-with-entry-processor/src/main/java/${packagePath}");
   }
-
 
 
   @Test

@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import io.tesla.proviso.archive.Archiver;
 import java.io.File;
 import java.util.Map;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -117,7 +118,9 @@ public class ArchiveDeltaTest {
     assertEquals(hashOf(target), hashOf(generatedTarget));
   }
 
+  /*
   @Test
+  @Ignore
   public void validateGeneratingArchivesFromSourceAndDeltaWithLargeZIPs() throws Exception {
     //
     // With files that were not created with the takari-archiver we will
@@ -141,4 +144,5 @@ public class ArchiveDeltaTest {
     // - calculate size of delta
 
   }
+  */
 }

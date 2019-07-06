@@ -52,6 +52,25 @@ public class Archiver {
     this.selector = new Selector(includes, excludes);
   }
 
+  /**
+   * Returns the normalized timestamp for a jar entry based on its name. This is necessary since javac will, when loading a class X, prefer a source file to a class file, if both files have the same
+   * timestamp. Therefore, we need to adjust the timestamp for class files to slightly after the normalized time.
+   *
+   * @param name The name hashOf the file for which we should return the normalized timestamp.
+   * @return the time for a new Jar file entry in milliseconds since the epoch.
+   */
+  public static long normalizedTimestamp(String name) {
+    if (name.endsWith(".class")) {
+      return DOS_EPOCH_IN_JAVA_TIME + MINIMUM_TIMESTAMP_INCREMENT;
+    } else {
+      return DOS_EPOCH_IN_JAVA_TIME;
+    }
+  }
+
+  public static ArchiverBuilder builder() {
+    return new ArchiverBuilder();
+  }
+
   public void archive(File archive, List<String> sourceDirectories) throws IOException {
     File[] fileSourceDirectories = new File[sourceDirectories.size()];
     for (int i = 0; i < sourceDirectories.size(); i++) {
@@ -194,21 +213,6 @@ public class Archiver {
     return directoryNames;
   }
 
-  /**
-   * Returns the normalized timestamp for a jar entry based on its name. This is necessary since javac will, when loading a class X, prefer a source file to a class file, if both files have the same
-   * timestamp. Therefore, we need to adjust the timestamp for class files to slightly after the normalized time.
-   *
-   * @param name The name hashOf the file for which we should return the normalized timestamp.
-   * @return the time for a new Jar file entry in milliseconds since the epoch.
-   */
-  public static long normalizedTimestamp(String name) {
-    if (name.endsWith(".class")) {
-      return DOS_EPOCH_IN_JAVA_TIME + MINIMUM_TIMESTAMP_INCREMENT;
-    } else {
-      return DOS_EPOCH_IN_JAVA_TIME;
-    }
-  }
-
   private long newEntryTimeMillis(String filename) {
     return normalize ? normalizedTimestamp(filename) : System.currentTimeMillis();
   }
@@ -233,10 +237,6 @@ public class Archiver {
       entry.writeEntry(aos);
     }
     aos.closeArchiveEntry();
-  }
-
-  public static ArchiverBuilder builder() {
-    return new ArchiverBuilder();
   }
 
   public static class ArchiverBuilder {

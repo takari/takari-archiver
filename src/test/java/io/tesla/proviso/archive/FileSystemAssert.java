@@ -4,20 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.io.ByteStreams;
-import java.io.ByteArrayInputStream;
+import io.tesla.proviso.archive.perms.FileMode;
 import java.io.File;
 import java.io.IOException;
-
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.Map;
 import org.codehaus.plexus.util.FileUtils;
 
-import io.tesla.proviso.archive.perms.FileMode;
-
 public class FileSystemAssert {
+
+  private static String basedir;
 
   public static void assertDirectoryExists(File outputDirectory, String directoryName) {
     File directory = new File(outputDirectory, directoryName);
@@ -59,17 +54,15 @@ public class FileSystemAssert {
     assertTrue(String.format("We expect to find the file %s, but it doesn't exist or is not executable.", fileName), file.exists() && file.isFile() && file.canExecute());
   }
 
+  //
+  // Helper methods for tests
+  //
+
   public static void assertFileMode(File outputDirectory, String string, String expectedUnix) {
     File f = new File(outputDirectory, string);
     String unix = FileMode.toUnix(FileMode.getFileMode(f));
     assertEquals(expectedUnix, unix);
   }
-
-  //
-  // Helper methods for tests
-  //
-
-  private static String basedir;
 
   public static final String getBasedir() {
     if (null == basedir) {
@@ -125,7 +118,7 @@ public class FileSystemAssert {
   // Git no longer seems to checkout empty directories. I don't recall this being an issue in the past, but
   // it's likely I just never did a clean checkout and noticed before. jvz.
   public static final File getArchiveProjectWithEmptyDirectories() {
-    File directory = new File(getBasedir(),"target/generated-archives/archive-with-empty-directories");
+    File directory = new File(getBasedir(), "target/generated-archives/archive-with-empty-directories");
     new File(directory, "0").mkdirs();
     new File(directory, "1").mkdirs();
     new File(directory, "2").mkdirs();
