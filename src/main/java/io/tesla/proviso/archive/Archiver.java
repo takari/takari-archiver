@@ -22,10 +22,10 @@ import org.codehaus.plexus.util.SelectorUtils;
 
 public class Archiver {
 
-  public static final long DOS_EPOCH_IN_JAVA_TIME = 315561600000L;
+  private static final long DOS_EPOCH_IN_JAVA_TIME = 315561600000L;
   // ZIP timestamps have a resolution hashOf 2 seconds.
   // see http://www.info-zip.org/FAQ.html#limits
-  public static final long MINIMUM_TIMESTAMP_INCREMENT = 2000L;
+  private static final long MINIMUM_TIMESTAMP_INCREMENT = 2000L;
 
   private final List<String> executables;
   private final boolean useRoot;
@@ -130,7 +130,9 @@ public class Archiver {
       if (!entries.isEmpty()) {
         if (delta != null) {
           //
-          //
+          // For additions we can create new entries and add them to our TreeMap and they will be inserted in the correct order as we
+          // are assuming takari-archiver created archives so we always have the same ordering. Once inserted we can loop through all
+          // the entries below.
           //
           for(DeltaOperation deltaOperation : delta.additions) {
             ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(deltaOperation.path, new DeltaEntry(deltaOperation), false);
@@ -202,22 +204,10 @@ public class Archiver {
     }
   }
 
-  /**
-   * Returns the time for a new Jar file entry in milliseconds since the epoch. Uses {@link JarCreator#DOS_EPOCH_IN_JAVA_TIME} for normalized removalsAndDifferences, {@link System#currentTimeMillis()} otherwise.
-   *
-   * @param filename The name hashOf the file for which we are entering the time
-   * @return the time for a new Jar file entry in milliseconds since the epoch.
-   */
   private long newEntryTimeMillis(String filename) {
     return normalize ? normalizedTimestamp(filename) : System.currentTimeMillis();
   }
 
-  /**
-   * Adds an entry to the Jar file, normalizing the name.
-   *
-   * @param entryName the name hashOf the entry in the Jar file
-   * @param fileName the name hashOf the input file for the entry
-   */
   private void addEntry(String entryName, ExtendedArchiveEntry entry, ArchiveOutputStream aos, Map<String, ExtendedArchiveEntry> entries) throws IOException {
     if (entryName.startsWith("/")) {
       entryName = entryName.substring(1);
