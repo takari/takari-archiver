@@ -42,12 +42,7 @@ public class ZipArchiveSource implements ExtendedSource {
 
   @Override
   public Iterable<Entry> entries() {
-    return new Iterable<Entry>() {
-      @Override
-      public Iterator<Entry> iterator() {
-        return new ArchiveEntryIterator();
-      }
-    };
+    return () -> new ArchiveEntryIterator();
   }
 
   class EntrySourceArchiveEntry implements Entry {

@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class DeltaEntry implements Entry {
+public class DeltaArchiveEntry implements Entry {
 
   private DeltaOperation deltaOperation;
 
-  public DeltaEntry(DeltaOperation deltaOperation) {
+  public DeltaArchiveEntry(DeltaOperation deltaOperation) {
     this.deltaOperation = deltaOperation;
   }
 
@@ -53,6 +53,6 @@ public class DeltaEntry implements Entry {
 
   @Override
   public long getTime() {
-    return 0;
+    return 0; // this will be set in the Archiver where it's used.
   }
 }

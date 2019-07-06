@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import io.tesla.proviso.archive.delta.ArchiveDelta.ArchiveDeltaData;
 import io.tesla.proviso.archive.delta.ArchiveDelta.DeltaInstruction;
 import io.tesla.proviso.archive.delta.ArchiveDelta.DeltaOperation;
-import io.tesla.proviso.archive.delta.DeltaEntry;
+import io.tesla.proviso.archive.delta.DeltaArchiveEntry;
 import io.tesla.proviso.archive.source.DirectoryEntry;
 import io.tesla.proviso.archive.source.DirectorySource;
 import java.io.File;
@@ -135,7 +135,7 @@ public class Archiver {
           // the entries below.
           //
           for (DeltaOperation deltaOperation : delta.additions) {
-            ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(deltaOperation.path, new DeltaEntry(deltaOperation), false);
+            ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(deltaOperation.path, new DeltaArchiveEntry(deltaOperation), false);
             archiveEntry.setTime(newEntryTimeMillis(deltaOperation.path));
             entries.put(deltaOperation.path, archiveEntry);
           }
@@ -150,7 +150,7 @@ public class Archiver {
             if (deltaOperation != null) {
               // removals: removalsAndDifferences that are not present in the target
               if (deltaOperation.instruction.equals(DeltaInstruction.DIFFERENCE)) {
-                ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(entry.getKey(), new DeltaEntry(deltaOperation), false);
+                ExtendedArchiveEntry archiveEntry = archiveHandler.createEntryFor(entry.getKey(), new DeltaArchiveEntry(deltaOperation), false);
                 archiveEntry.setTime(newEntryTimeMillis(entry.getKey()));
                 writeEntry(archiveEntry, aos);
               } else { // removals

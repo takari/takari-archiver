@@ -30,15 +30,12 @@ public class DirectorySource implements Source {
 
   @Override
   public Iterable<Entry> entries() {
-    return new Iterable<Entry>() {
-      @Override
-      public Iterator<Entry> iterator() {
-        DirectoryEntryIterator[] iterators = new DirectoryEntryIterator[sourceDirectories.length];
-        for (int i = 0; i < iterators.length; i++) {
-          iterators[i] = new DirectoryEntryIterator(sourceDirectories[i]);
-        }
-        return Iterators.concat(iterators);
+    return () -> {
+      DirectoryEntryIterator[] iterators = new DirectoryEntryIterator[sourceDirectories.length];
+      for (int i = 0; i < iterators.length; i++) {
+        iterators[i] = new DirectoryEntryIterator(sourceDirectories[i]);
       }
+      return Iterators.concat(iterators);
     };
   }
 

@@ -18,13 +18,7 @@ public class MapSource implements Source {
 
   @Override
   public Iterable<Entry> entries() {
-
-    return new Iterable<Entry>() {
-      @Override
-      public Iterator<Entry> iterator() {
-        return new MapEntryIterator(entries.entrySet().iterator());
-      }
-    };
+    return () -> new MapEntryIterator(entries.entrySet().iterator());
   }
 
   @Override
