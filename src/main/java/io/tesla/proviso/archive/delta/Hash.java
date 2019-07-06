@@ -28,10 +28,10 @@ public class Hash {
     return hasher.hash().toString();
   }
 
-  public static Map<String, String> hashEntriesOf(File file) throws IOException {
+  public static Map<String, String> hashEntriesOf(File archive) throws IOException {
 
     Map<String, String> paths = new HashMap<>();
-    ZipFile zip = new ZipFile(file);
+    ZipFile zip = new ZipFile(archive);
     Enumeration<? extends ZipEntry> entries = zip.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = entries.nextElement();

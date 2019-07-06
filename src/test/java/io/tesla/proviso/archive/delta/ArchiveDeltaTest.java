@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-public class ArchiveDeltaGeneratorTest {
+public class ArchiveDeltaTest {
 
   @Rule
   public TestName name = new TestName();
@@ -112,8 +112,33 @@ public class ArchiveDeltaGeneratorTest {
     File generatedTarget = getTargetArchive("generate-archive-target-1.jar");
     ArchiveDelta delta = deltaOf(source, target);
     delta.print();
-    new ArchiveGenerator().generate(source, delta, generatedTarget);
+    new ArchiveGenerator(source, delta, generatedTarget).generate();
 
     assertEquals(hashOf(target), hashOf(generatedTarget));
+  }
+
+  @Test
+  public void validateGeneratingArchivesFromSourceAndDeltaWithLargeZIPs() throws Exception {
+    //
+    // With files that were not created with the takari-archiver we will
+    //
+    File source = new File("/Users/jvanzyl/downloads/jenkins-2.164.3.war");
+    File target = new File("/Users/jvanzyl/downloads/jenkins-2.176.1.war");
+    ArchiveDelta delta = deltaOf(source, target);
+    delta.print();
+    File generatedTarget = new File("/Users/jvanzyl/downloads/jenkins-2.176.1-generated.war");
+
+    new ArchiveGenerator(source, delta, generatedTarget).generate();
+    delta = deltaOf(target, generatedTarget);
+    delta.print();
+
+    assertEquals(hashOf(target), hashOf(generatedTarget));
+
+    // - A tool to rewrite all the entries with zeroed out time entries
+    // - I could have a mode to try and replicate the time entry
+    // - more large file tests, do some timing
+    // - serialized format of the delta
+    // - calculate size of delta
+
   }
 }

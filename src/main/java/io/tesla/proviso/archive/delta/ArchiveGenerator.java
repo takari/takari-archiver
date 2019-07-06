@@ -7,11 +7,20 @@ import java.io.File;
 
 public class ArchiveGenerator {
 
-  public void generate(File sourceArchive, ArchiveDelta delta, File generatedTarget) throws Exception {
+  private final File sourceArchive;
+  private final ArchiveDelta delta;
+  private final File targetArchive;
 
+  public ArchiveGenerator(File sourceArchive, ArchiveDelta delta, File targetArchive) {
+    this.sourceArchive = sourceArchive;
+    this.delta = delta;
+    this.targetArchive = targetArchive;
+  }
+
+  public void generate() throws Exception {
     Source source = ArchiverHelper.getArchiveHandler(sourceArchive, true).getArchiveSource();
     Archiver archiver = Archiver.builder().normalize(true).build();
-    archiver.archive(generatedTarget, delta.data(), source);
+    archiver.archive(targetArchive, delta.data(), source);
   }
 }
 
