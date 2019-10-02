@@ -1,6 +1,11 @@
-package io.tesla.proviso.archive;
+package io.tesla.proviso.archive.source;
 
-import io.tesla.proviso.archive.source.FileSource;
+import io.tesla.proviso.archive.ArchiveValidator;
+import io.tesla.proviso.archive.Archiver;
+import io.tesla.proviso.archive.FileSystemAssert;
+import io.tesla.proviso.archive.Source;
+import io.tesla.proviso.archive.tar.TarGzArchiveValidator;
+import io.tesla.proviso.archive.zip.source.FileSource;
 import java.io.File;
 import org.junit.Test;
 

@@ -18,5 +18,7 @@ public interface ArchiveHandler {
 
   Source getArchiveSource();
 
+  ExtendedSource getArchiveExtendedSource();
+
   Map<String, String> hashEntriesOf(File archive) throws IOException;
 }

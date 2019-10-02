@@ -28,7 +28,7 @@ public class ZipArchiveSource implements ExtendedSource {
       };
       entries = zipFile.getEntries();
     } catch (IOException e) {
-      throw new RuntimeException(String.format("Cannot determine the type hashOf archive %s.", archive), e);
+      throw new RuntimeException(String.format("Cannot determine the type of archive %s.", archive), e);
     }
   }
 

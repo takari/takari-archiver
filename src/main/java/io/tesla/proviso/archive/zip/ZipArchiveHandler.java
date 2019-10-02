@@ -3,6 +3,7 @@ package io.tesla.proviso.archive.zip;
 import io.tesla.proviso.archive.ArchiveHandlerSupport;
 import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.ExtendedArchiveEntry;
+import io.tesla.proviso.archive.ExtendedSource;
 import io.tesla.proviso.archive.Source;
 import io.tesla.proviso.archive.delta.Hash;
 import java.io.File;
@@ -46,4 +47,10 @@ public class ZipArchiveHandler extends ArchiveHandlerSupport {
   public Source getArchiveSource() {
     return new ZipArchiveSource(archive);
   }
+
+  @Override
+  public ExtendedSource getArchiveExtendedSource() {
+    return new ZipArchiveSource(archive);
+  }
+
 }

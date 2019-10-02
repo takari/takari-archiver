@@ -1,4 +1,4 @@
-package io.tesla.proviso.archive.source;
+package io.tesla.proviso.archive.zip.source;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;

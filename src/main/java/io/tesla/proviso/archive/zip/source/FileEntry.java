@@ -1,4 +1,4 @@
-package io.tesla.proviso.archive.source;
+package io.tesla.proviso.archive.zip.source;
 
 import com.google.common.io.ByteStreams;
 import io.tesla.proviso.archive.Entry;

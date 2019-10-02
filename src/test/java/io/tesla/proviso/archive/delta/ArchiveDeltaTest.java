@@ -1,8 +1,10 @@
 package io.tesla.proviso.archive.delta;
 
+import static io.tesla.proviso.archive.FileSystemAssert.getArchiveProject;
 import static io.tesla.proviso.archive.FileSystemAssert.getTargetArchive;
 import static io.tesla.proviso.archive.FileSystemAssert.mapSource;
 import static io.tesla.proviso.archive.delta.ArchiveDeltaGenerator.deltaOf;
+import static io.tesla.proviso.archive.delta.Hash.hashEntriesOf;
 import static io.tesla.proviso.archive.delta.Hash.hashOf;
 import static org.junit.Assert.assertEquals;
 
@@ -95,7 +97,6 @@ public class ArchiveDeltaTest {
         .put("path/1", "1")
         .put("path/2", "2")
         .put("path/3", "3")
-        .put("path/4", "4")
         .build();
     archiver.archive(source, mapSource(sourceEntries));
 
@@ -115,6 +116,43 @@ public class ArchiveDeltaTest {
     delta.print();
     new ArchiveGenerator(source, delta, generatedTarget).generate();
 
+    assertEquals(hashOf(target), hashOf(generatedTarget));
+  }
+
+  @Test
+  public void validateGeneratingArchivesFromSourceAndDeltaTar() throws Exception {
+
+    Archiver archiver = Archiver.builder()
+        .normalize(true)
+        .posixLongFileMode(true)
+        .build();
+
+    File source = getTargetArchive("generate-archive-source-0.tar.gz");
+    Map<String, String> sourceEntries = new ImmutableMap.Builder<String, String>()
+        .put("path/", "")
+        .put("path/0", "0")
+        .put("path/1", "1")
+        .put("path/2", "2")
+        .put("path/3", "3")
+        .build();
+    archiver.archive(source, mapSource(sourceEntries));
+
+    File target = getTargetArchive("generate-archive-target-0.tar.gz");
+    Map<String, String> targetEntries = new ImmutableMap.Builder<String, String>()
+        .put("path/", "")
+        .put("path/0", "0")
+        .put("path/1", "1")
+        //.put("path/2","2") // removal
+        .put("path/3", "3difference") // difference
+        .put("path/4", "4") // addition
+        .build();
+    archiver.archive(target, mapSource(targetEntries));
+
+    File generatedTarget = getTargetArchive("generate-archive-target-1.tar.gz");
+    ArchiveDelta delta = deltaOf(source, target);
+    delta.print();
+
+    new ArchiveGenerator(source, delta, generatedTarget).generate();
     assertEquals(hashOf(target), hashOf(generatedTarget));
   }
 

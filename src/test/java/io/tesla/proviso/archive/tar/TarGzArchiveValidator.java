@@ -1,5 +1,6 @@
-package io.tesla.proviso.archive;
+package io.tesla.proviso.archive.tar;
 
+import io.tesla.proviso.archive.AbstractArchiveValidator;
 import io.tesla.proviso.archive.tar.TarGzArchiveSource;
 import java.io.File;
 

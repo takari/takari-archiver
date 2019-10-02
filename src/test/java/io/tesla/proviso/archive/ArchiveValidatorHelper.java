@@ -1,5 +1,7 @@
 package io.tesla.proviso.archive;
 
+import io.tesla.proviso.archive.tar.TarGzArchiveValidator;
+import io.tesla.proviso.archive.zip.ZipArchiveValidator;
 import java.io.File;
 
 public class ArchiveValidatorHelper {

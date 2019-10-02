@@ -1,6 +1,8 @@
-package io.tesla.proviso.archive;
+package io.tesla.proviso.archive.source;
 
 import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.Entry;
+import io.tesla.proviso.archive.Source;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,12 +20,7 @@ public class StringListSource implements Source {
 
   @Override
   public Iterable<Entry> entries() {
-    return new Iterable<Entry>() {
-      @Override
-      public Iterator<Entry> iterator() {
-        return new StringEntryIterator(entries.iterator());
-      }
-    };
+    return () -> new StringEntryIterator(entries.iterator());
   }
 
   @Override

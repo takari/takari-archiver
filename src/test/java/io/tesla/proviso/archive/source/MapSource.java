@@ -1,6 +1,9 @@
-package io.tesla.proviso.archive;
+package io.tesla.proviso.archive.source;
 
 import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.Entry;
+import io.tesla.proviso.archive.Source;
+import io.tesla.proviso.archive.perms.FileMode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +14,20 @@ import java.util.Map;
 public class MapSource implements Source {
 
   Map<String, String> entries;
+  Type type;
+
+  public enum Type {
+    ZIP,
+    TARGZ
+  }
 
   public MapSource(Map<String, String> entries) {
+    this(entries, Type.ZIP);
+  }
+
+  public MapSource(Map<String, String> entries, Type type) {
     this.entries = entries;
+    this.type = type;
   }
 
   @Override
@@ -84,7 +98,11 @@ public class MapSource implements Source {
 
     @Override
     public int getFileMode() {
-      return 0;
+      if(type.equals(Type.ZIP)) {
+        return 0;
+      } else {
+        return entry.getKey().endsWith("/") ? FileMode.fromOctalBits(0755).getBits() : FileMode.fromOctalBits(0644).getBits();
+      }
     }
 
     @Override

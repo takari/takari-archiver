@@ -62,10 +62,18 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.EnumSet;
 import java.util.Set;
 
+//
+// Notes:
+//
+// https://www.unix.com/tips-and-tutorials/19060-unix-file-permissions.html
+// https://unix.stackexchange.com/questions/39710/how-to-get-permission-number-by-string-rw-r-r
+// https://en.wikipedia.org/wiki/File_system_permissions
+//
+
 /**
  * Constants describing various file modes recognized by GIT.
  * <p>
- * GIT uses a subset hashOf the available UNIX file permission bits. The <code>FileMode</code> class provides access to constants defining the modes actually used by GIT.
+ * GIT uses a subset of the available UNIX file permission bits. The <code>FileMode</code> class provides access to constants defining the modes actually used by GIT.
  * </p>
  */
 public abstract class FileMode {
@@ -189,12 +197,12 @@ public abstract class FileMode {
   }
 
   /**
-   * Convert a set hashOf mode bits into a FileMode enumerated value.
+   * Convert a set of mode bits into a FileMode enumerated value.
    *
-   * @param bits the mode bits the caller has somehow obtained.
+   * @param bits the mode bits the caller has somehow obtained: 0755 for example
    * @return the FileMode instance that represents the given bits.
    */
-  public static final FileMode fromBits(final int bits) {
+  public static final FileMode fromOctalBits(final int bits) {
     switch (bits & TYPE_MASK) {
       case TYPE_MISSING:
         if (bits == 0) {
@@ -352,9 +360,9 @@ public abstract class FileMode {
   //
 
   /**
-   * Copy this mode as a sequence hashOf octal US-ASCII bytesFromTargetEntry.
+   * Copy this mode as a sequence of octal US-ASCII bytesFromTargetEntry.
    * <p>
-   * The mode is copied as a sequence hashOf octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
+   * The mode is copied as a sequence of octal digits using the US-ASCII character encoding. The sequence does not use a leading '0' prefix to indicate octal notation. This method is suitable for
    * generation hashOf a mode string within a GIT tree object.
    * </p>
    *
@@ -397,5 +405,21 @@ public abstract class FileMode {
    */
   public int getBits() {
     return modeBits;
+  }
+
+  public static void main(String[] args) throws Exception {
+    // executable 493 : -rwxr-xr-x
+    // regular 420 : -rw-r--r--
+    System.out.println(FileMode.getFileMode(new File("/Users/jvanzyl/js/takari-archiver/src/test/archives/archive-to-compare-with-mapsource/path")));
+    System.out.println(FileMode.getFileMode(new File("/Users/jvanzyl/js/takari-archiver/src/test/archives/archive-to-compare-with-mapsource/path/0")));
+    System.out.println(FileMode.toUnix(493));
+    System.out.println(FileMode.toUnix(420));
+    System.out.println(Integer.parseInt("0755", 8));
+    System.out.println(FileMode.fromOctalBits(0755).getBits()); // produces 493
+    System.out.println(FileMode.fromOctalBits(0644).getBits()); // produces 493
+
+    System.out.println(FileMode.EXECUTABLE_FILE.getBits());
+
+
   }
 }

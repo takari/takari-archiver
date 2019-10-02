@@ -1,4 +1,4 @@
-package io.tesla.proviso.archive.source;
+package io.tesla.proviso.archive.zip.source;
 
 import io.tesla.proviso.archive.Entry;
 import java.io.ByteArrayInputStream;

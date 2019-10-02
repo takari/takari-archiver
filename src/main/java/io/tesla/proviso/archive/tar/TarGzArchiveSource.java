@@ -4,16 +4,17 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Closer;
 import io.tesla.proviso.archive.ArchiverHelper;
 import io.tesla.proviso.archive.Entry;
-import io.tesla.proviso.archive.Source;
+import io.tesla.proviso.archive.ExtendedSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
+import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 
-public class TarGzArchiveSource implements Source {
+public class TarGzArchiveSource implements ExtendedSource {
 
   private final ArchiveInputStream archiveInputStream;
   private final Closer closer;
@@ -23,7 +24,7 @@ public class TarGzArchiveSource implements Source {
     try {
       archiveInputStream = closer.register(ArchiverHelper.getArchiveHandler(archive, false).getInputStream());
     } catch (IOException e) {
-      throw new RuntimeException(String.format("Cannot determine the type hashOf archive %s.", archive), e);
+      throw new RuntimeException(String.format("Cannot determine the type of archive %s.", archive), e);
     }
   }
 
@@ -40,6 +41,11 @@ public class TarGzArchiveSource implements Source {
   @Override
   public boolean isDirectory() {
     return true;
+  }
+
+  @Override
+  public Entry entry(String name) {
+    return null;
   }
 
   class EntrySourceArchiveEntry implements Entry {
@@ -94,17 +100,18 @@ public class TarGzArchiveSource implements Source {
 
   class ArchiveEntryIterator implements Iterator<Entry> {
 
-    TarArchiveEntry archiveEntry;
+    ArchiveEntry archiveEntry;
 
     @Override
     public Entry next() {
-      return new EntrySourceArchiveEntry(archiveEntry);
+      return new EntrySourceArchiveEntry((TarArchiveEntry) archiveEntry);
     }
 
     @Override
     public boolean hasNext() {
       try {
-        return (archiveEntry = (TarArchiveEntry) archiveInputStream.getNextEntry()) != null;
+        archiveEntry = archiveInputStream.getNextEntry();
+        return archiveEntry != null ? true : false;
       } catch (IOException e) {
         return false;
       }

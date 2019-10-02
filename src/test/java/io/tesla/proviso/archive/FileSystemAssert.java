@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import io.tesla.proviso.archive.perms.FileMode;
+import io.tesla.proviso.archive.source.MapSource;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;

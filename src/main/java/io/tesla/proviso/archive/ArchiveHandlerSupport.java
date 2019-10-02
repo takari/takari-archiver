@@ -1,5 +1,7 @@
 package io.tesla.proviso.archive;
 
+import static io.tesla.proviso.archive.delta.Hash.hashOf;
+
 import io.tesla.proviso.archive.delta.Hash;
 import io.tesla.proviso.archive.perms.FileMode;
 import java.io.File;
@@ -36,7 +38,7 @@ public abstract class ArchiveHandlerSupport implements ArchiveHandler {
     for (Entry entry : source.entries()) {
       String entryName = entry.getName();
       if (!entry.isDirectory()) {
-        paths.put(entryName, Hash.hashOf(entry.getInputStream()));
+        paths.put(entryName, hashOf(entry.getInputStream(), false));
       }
     }
     source.close();

@@ -18,8 +18,11 @@ public class ArchiveGenerator {
   }
 
   public void generate() throws Exception {
+    System.out.println("sourceArchive = " + sourceArchive);
     Source source = ArchiverHelper.getArchiveHandler(sourceArchive, true).getArchiveSource();
+    System.out.println("source.getClass() = " + source.getClass());
     Archiver archiver = Archiver.builder().normalize(true).build();
+    System.out.println("We are attempting to archive");
     archiver.archive(targetArchive, delta.data(), source);
   }
 }

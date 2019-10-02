@@ -18,9 +18,20 @@ public class Hash {
   }
 
   public static String hashOf(InputStream stream) throws IOException {
+    return hashOf(stream, true);
+  }
+
+  //
+  // When getting the InputStream for an entry from a TarArchiveInputStream you can't
+  // close the stream or you can't read anymore entries. Hence the option not to close.
+  //
+  public static String hashOf(InputStream stream, boolean closeStream) throws IOException {
     Hasher hasher = Hashing.md5().newHasher();
+    if(closeStream) {
     try (InputStream targetStream = stream) {
       ByteStreams.copy(targetStream, Funnels.asOutputStream(hasher));
+    }} else {
+      ByteStreams.copy(stream, Funnels.asOutputStream(hasher));
     }
     return hasher.hash().toString();
   }

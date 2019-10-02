@@ -3,6 +3,8 @@ package io.tesla.proviso.archive.delta;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
+import io.tesla.proviso.archive.ArchiveHandler;
+import io.tesla.proviso.archive.ArchiverHelper;
 import io.tesla.proviso.archive.Entry;
 import io.tesla.proviso.archive.ExtendedSource;
 import io.tesla.proviso.archive.zip.ZipArchiveSource;
@@ -78,7 +80,7 @@ public class ArchiveDelta {
 
   public ArchiveDeltaData data() {
 
-    ExtendedSource targetSource = new ZipArchiveSource(target);
+    ExtendedSource targetSource = ArchiverHelper.getArchiveHandler(target).getArchiveExtendedSource();
     Map<String, DeltaOperation> removalsAndDifferences = Maps.newHashMap();
     List<DeltaOperation> deltaOperationAdditions = additions.stream().map(p -> new DeltaOperation(DeltaInstruction.ADDITION, p, bytesFromTargetEntry(p, targetSource))).collect(Collectors.toList());
     differences.forEach(p -> removalsAndDifferences.put(p, new DeltaOperation(DeltaInstruction.DIFFERENCE, p, bytesFromTargetEntry(p, targetSource))));
